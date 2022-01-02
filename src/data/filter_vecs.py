@@ -32,7 +32,7 @@ def get_names():
         names = [l.strip().lower() for l in lines]
         return names
         
-def load_model(fname, binary) -> Tuple[gensim.models.keyedvectors.WordEmbeddingsKeyedVectors, List[np.ndarray], List[str]]:
+def load_model(fname, binary) -> Tuple[gensim.models.keyedvectors.KeyedVectors, List[np.ndarray], List[str]]:
     """
     :param fname: str, the filename of the embeddings file
     :param binary: whether the format is binary
@@ -41,7 +41,7 @@ def load_model(fname, binary) -> Tuple[gensim.models.keyedvectors.WordEmbeddings
     """
     model = KeyedVectors.load_word2vec_format(fname, binary=binary)
     vecs = model.vectors
-    words = list(model.vocab.keys())
+    words = list(model.index_to_key)
 
     return model, vecs, words
 

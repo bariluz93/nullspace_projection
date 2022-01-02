@@ -2,12 +2,40 @@
 from typing import Dict
 import numpy as np
 import scipy
-from src import classifier
+import classifier
 from typing import List
 from tqdm import tqdm
 import random
 import warnings
+from gensim.models import KeyedVectors
+from gensim.models.keyedvectors import Word2VecKeyedVectors
 
+def get_vectors(word_list: list, model: Word2VecKeyedVectors):
+    vecs = []
+    for w in word_list:
+        vecs.append(model[w])
+
+    vecs = np.array(vecs)
+
+    return vecs
+
+def load_word_vectors(fname):
+    model = KeyedVectors.load_word2vec_format(fname, binary=False)
+    vecs = model.vectors
+    words = list(model.index_to_key)
+    return model, vecs, words
+
+
+def project_on_gender_subspaces(gender_vector, model: Word2VecKeyedVectors, n=2500):
+    group1 = model.similar_by_vector(gender_vector, topn=n, restrict_vocab=None)
+    group2 = model.similar_by_vector(-gender_vector, topn=n, restrict_vocab=None)
+
+    all_sims = model.similar_by_vector(gender_vector, topn=len(model.vectors), restrict_vocab=None)
+    eps = 0.03
+    idx = [i for i in range(len(all_sims)) if abs(all_sims[i][1]) < eps]
+    samp = set(np.random.choice(idx, size=n))
+    neut = [s for i, s in enumerate(all_sims) if i in samp]
+    return group1, group2, neut
 
 def get_rowspace_projection(W: np.ndarray) -> np.ndarray:
     """
