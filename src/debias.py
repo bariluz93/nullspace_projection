@@ -2,13 +2,15 @@
 from typing import Dict
 import numpy as np
 import scipy
-import classifier
 from typing import List
 from tqdm import tqdm
 import random
 import warnings
 from gensim.models import KeyedVectors
 from gensim.models.keyedvectors import Word2VecKeyedVectors
+import sys
+sys.path.append("..")
+from nullspace_projection.src import classifier
 
 def get_vectors(word_list: list, model: Word2VecKeyedVectors):
     vecs = []

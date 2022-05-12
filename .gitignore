@@ -306,3 +306,10 @@ sent_race/
 data/emoji_sent_race_origin/
 data/emoji_sent_race_mlp/
 data/emoji_sent_race/
+
+
+data/*
+null_space/
+notebooks/P.glove*
+notebooks/embeddings*
+src/inlp-oop/.ipynb_checkpoints/
