@@ -31,7 +31,8 @@ def load_word_vectors(fname):
 def project_on_gender_subspaces(gender_vector, model: Word2VecKeyedVectors, n=2500):
     group1 = model.similar_by_vector(gender_vector, topn=n, restrict_vocab=None)
     group2 = model.similar_by_vector(-gender_vector, topn=n, restrict_vocab=None)
-
+    print("len(model.vectors)")
+    print(len(model.vectors))
     all_sims = model.similar_by_vector(gender_vector, topn=len(model.vectors), restrict_vocab=None)
     eps = 0.03
     idx = [i for i in range(len(all_sims)) if abs(all_sims[i][1]) < eps]
